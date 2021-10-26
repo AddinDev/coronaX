@@ -27,7 +27,7 @@ def get_quran(index):
   response = requests.get("http://api.alquran.cloud/v1/surah")
   json_data = json.loads(response.text)
   surah = json_data['data'][index]
-  text = surah['name'] + " - " + surah['englishName'] + " - " + surah['englishNameTranslation'] + " - " + "Number of ayahs: " + str(surah['numberOfAyahs'])
+  text = surah['name'] + " - " + surah['englishName'] + " - " + surah['englishNameTranslation'] + " - " + str(surah['numberOfAyahs']) + " ayahs"
   return(text)
 
 @client.event
@@ -42,36 +42,27 @@ async def on_message(message):
 
     msg = message.content
 
-    if msg.startswith('$hello'):
+    if msg.startswith('/hello'):
         await message.channel.send('Hello!')
 
-    if msg.startswith('$inspire'):
+    if msg.startswith('/inspire'):
         quote = get_quote()
         await message.channel.send(quote)
 
-    if msg.startswith('$coronaX'):
-        text = "Useless bot made by udin. Fvck u"
+    if msg.startswith('coronaX'):
+        text = "```fix\nUseless bot made by udin. \nHewwo! \nMade with Python 🐍 \n```"
         await message.channel.send(text)
 
-    if msg.startswith('$quran'):
-      quran_index = msg.split("$quran ", 1)[1]
-      surah = get_quran(int(quran_index) - 1)
-      await message.channel.send(surah)
+    if msg.startswith('/quran'):
+      quran_index = int(msg.split("/quran ", 1)[1]) - 1
+      if quran_index < 114:
+        surah = get_quran(quran_index)
+        await message.channel.send(surah)
+      else:
+        await message.channel.send("error lah blok, surah cuma ada 114")
 
     if any(word in msg for word in sad_words):
         await message.channel.send(random.choice(starter_encouragements))
-
-
-class MyClient(discord.Client):
-    async def on_member_join(self, member):
-        guild = member.guild
-        if guild.system_channel is not None:
-            to_send = 'Welcome {0.mention} to {1.name}!'.format(member, guild)
-            await guild.system_channel.send(to_send)
-
-
-intents = discord.Intents.default()
-intents.members = True
 
 keep_alive()
 

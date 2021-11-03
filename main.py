@@ -77,6 +77,7 @@ async def on_message(message):
     await message.channel.send('Hello!')
 
   if msg.startswith('/inspire'):
+    print("Inspire")
     quote = get_quote()
     await message.channel.send(quote)
 
@@ -86,6 +87,7 @@ async def on_message(message):
 
 # Spam
   if msg.startswith('/spam'):
+    print("Spam")
     splitted = msg.split()
     name = splitted[1]
     time = int(splitted[2])
@@ -94,6 +96,7 @@ async def on_message(message):
 
 # Quran
   if msg.startswith('/quran'):
+    print("Quran")
     quran_index = int(msg.split("/quran ", 1)[1]) - 1
     if quran_index < 114:
       surah = get_quran(quran_index)
@@ -103,12 +106,14 @@ async def on_message(message):
 
 # News
   if msg.startswith('/news'):
+    print("News")
     news_list = get_news()
     for news in news_list:
         text = news["source"]["name"] + " - " + news["description"]
         await message.channel.send(text + "\n===========")
 
   if msg.startswith('/search'):
+    print("Search")
     word = msg.split("/search ", 1)[1]
     news_list = search_news(word)
     await message.channel.send("SEARCHING FOR: " + word) 
